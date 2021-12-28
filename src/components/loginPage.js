@@ -1,6 +1,6 @@
-import { Button, Card, Input, Row } from "antd";
-import Form from "antd/lib/form/Form";
+import {Form, Button, Card, Input, Row } from "antd";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
   return (
@@ -18,8 +18,9 @@ export const LoginPage = () => {
     </div>
   );
 };
-const Demo = () => {
+const   Demo = () => {
   const [type, setType] = useState(true);
+  const navigate = useNavigate()
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -90,7 +91,9 @@ const Demo = () => {
           span: 16,
         }}
       >
-        <Button type="primary" htmlType="submit">
+      
+
+        <Button type="primary" htmlType="submit" onClick={()=> navigate("/notes") }>
           Submit
         </Button>
       </Form.Item>
