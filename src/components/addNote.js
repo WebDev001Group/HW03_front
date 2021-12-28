@@ -1,4 +1,6 @@
-import { Collapse } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { Button, Col, Collapse, Input, Row } from "antd";
+import TextArea from "antd/lib/input/TextArea";
 const { Panel } = Collapse;
 
 function callback(key) {
@@ -12,10 +14,29 @@ const text = `
 `;
 export const AddNote = () => {
   return (
-    <div style={style.div}>
-      <Collapse onChange={callback} style={style.collapse}>
-        <Panel header="This is panel header 1" key="1">
-          <p>{text}</p>
+    <div style={style.parent}>
+      <Collapse bordered={false} onChange={callback} style={style.collapse}>
+        <Panel
+          header={
+            <Row style={{ width: "100%" }}>
+              <Col flex={4}>
+                <Input
+                  size="large"
+                  placeholder="start a new notie:)"
+                  prefix={<UserOutlined />}
+                />
+              </Col>
+              <Col flex={1}>
+                <Button style={{ width: "100%", height: "100%" }}>
+                  submit
+                </Button>
+              </Col>
+            </Row>
+          }
+          key="1"
+          showArrow={false}
+        >
+          <TextArea rows={4} defaultValue={"more explanations..."} />{" "}
         </Panel>
       </Collapse>
     </div>
@@ -23,9 +44,15 @@ export const AddNote = () => {
 };
 const style = {
   collapse: {
-    width: "80%",
+    width:"100%",
+    maxWidth:900,
   },
-  div: {
+ 
+  parent:{
     marginTop: 10,
-  },
+    marginBottom: 10,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }
 };

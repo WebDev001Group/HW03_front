@@ -19,8 +19,34 @@ const data = [
       content: [
         {
           price: '£59.99',
-          space: '5 GB of space',
+          space: '5 GB of space 5 GB of space 5 GB of space 5 GB of space 5 GB of space 5 GB of space 5 GB of space 5 GB of space5 GB of space',
           user: '5 users',
+          support: '24/7 support',
+          backup: 'Safe, reliable backup',
+          access: 'Access from anywhere'
+        }
+      ]
+    },
+    {
+      title: 'Enterprise',
+      content: [
+        {
+          price: '£99.99',
+          space: 'Unlimited space',
+          user: '15 users',
+          support: '24/7 support',
+          backup: 'Safe, reliable backup',
+          access: 'Access from anywhere'
+        }
+      ]
+    },
+    {
+      title: 'Enterprise',
+      content: [
+        {
+          price: '£99.99',
+          space: 'Unlimited space',
+          user: '15 users',
           support: '24/7 support',
           backup: 'Safe, reliable backup',
           access: 'Access from anywhere'
@@ -56,7 +82,7 @@ export const NoteGrid = () => {
     dataSource={data}
     renderItem={item => (
       <List.Item>
-        <Note title={"pashamam"} src={"https://joeschmoe.io/api/v1/random"}/>
+        <Note title={item.title} description={item.content[0].space} src={"https://joeschmoe.io/api/v1/random"}/>
       </List.Item>
     )}
   />
