@@ -1,8 +1,24 @@
-import {Form, Button, Card, Input, Row } from "antd";
+import { Form, Button, Card, Input, Row, message } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { login } from "../redux/actions";
+import { loginProccess } from "../controller/login";
 
-export const LoginPage = () => {
+const mapStateToProps = (state) => {
+  return { isLoggedIn: state.isLoggedIn };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (userData) => dispatch(login(userData)),
+  };
+};
+
+const LoginPage = ({ isLoggedIn, login, logout }) => {
+  const navigate = useNavigate();
+
+  if (isLoggedIn) navigate("/notes");
+
   return (
     <div className="App">
       <Row
@@ -12,22 +28,35 @@ export const LoginPage = () => {
         style={{ minHeight: "100vh" }}
       >
         <Card>
-          <Demo />
+          <Demo navigate={navigate} login={login} />
         </Card>
       </Row>
     </div>
   );
 };
-const   Demo = () => {
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+const Demo = ({ navigate, login }) => {
   const [type, setType] = useState(true);
-  const navigate = useNavigate()
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const [form] = Form.useForm();
+
+  const onFinish = async (values) => {
+    console.log("fields:", values);
+
+    let result = await loginProccess(
+      values["username"],
+      values["password"],
+      values["r_password"]
+    );
+    console.log("fields:", result);
+    if (result.status) {
+      login(result.data)
+      navigate("/notes");
+    } else {
+      message.error(result.message);
+    }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo) => {};
 
   return (
     <Form
@@ -44,6 +73,7 @@ const   Demo = () => {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
+      form={form}
     >
       <Form.Item
         label="Username"
@@ -91,9 +121,11 @@ const   Demo = () => {
           span: 16,
         }}
       >
-      
-
-        <Button type="primary" htmlType="submit" onClick={()=> navigate("/notes") }>
+        <Button
+          type="primary"
+          htmlType="submit"
+          // onClick={() => navigate("/notes")}
+        >
           Submit
         </Button>
       </Form.Item>

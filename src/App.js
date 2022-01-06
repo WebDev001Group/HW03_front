@@ -2,8 +2,8 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./router/privateRoute";
-import { LoginPage } from "./components/loginPage";
-import { NotePage } from "./components/notePage";
+import LoginPage  from "./components/loginPage";
+import NotePage  from "./components/notePage";
 
 const App = () => {
   return (

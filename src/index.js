@@ -3,12 +3,21 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
-import store from "./redux/store";
+import {Store , PersistStorage} from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider store={Store}>
     <React.StrictMode>
-      <App />
+    <PersistGate
+          persistor={PersistStorage}
+          onBeforeLift={async () => {
+            // await Font.loadAsync(Fonts);
+            console.log("persist on before lift")
+          }}
+        >
+          <App />
+        </PersistGate>
     </React.StrictMode>
   </Provider>,
 

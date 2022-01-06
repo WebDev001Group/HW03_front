@@ -2,9 +2,15 @@ import React from "react";
 
 import { Anchor } from "antd";
 import { ThunderboltOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 const { Link } = Anchor;
 
-function AppHeader() {
+function AppHeader({ logout }) {
+  const navigate = useNavigate();
+  const onClick = () => {
+    logout();
+    navigate("/");
+  };
   return (
     <div className="container-fluid">
       <div className="header">
@@ -12,9 +18,11 @@ function AppHeader() {
           <ThunderboltOutlined />
           <a href="https://github.com/WebDev001Group">Notie</a>
         </div>
-        <Anchor targetOffset="65">
-          <Link href="/" title="logout" />
-        </Anchor>
+        <div onClick={onClick}>
+          <Anchor targetOffset="65">
+            <Link title="logout" />
+          </Anchor>
+        </div>
       </div>
     </div>
   );

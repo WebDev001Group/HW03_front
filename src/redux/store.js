@@ -1,7 +1,29 @@
-import { createStore } from "redux";
+import loggedInReducer from "./reducers/isLoggedIn";
+import notesReducer from "./reducers/notes";
 
-import rootReducer from "./rootReducer";
+import { createStore, applyMiddleware } from "redux";
+import { persistStore, persistCombineReducers } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+// import thunk from "redux-thunk";
+import logger from "redux-logger";
 
-const store = createStore(rootReducer);
+const ConfigureStore = () => {
+  const config = {
+    key: "root",
+    storage: storage,
+    // debug:  MODE === "DEV", //should be false for production mode
+  };
+  const Store = createStore(
+    persistCombineReducers(config, {
+      loggedInReducer,
+      notesReducer,
+    }),
 
-export default store;
+    applyMiddleware(logger)
+  );
+  console.log(Store.getState());
+  const PersistStorage = persistStore(Store);
+  return { Store, PersistStorage };
+};
+
+export const { Store, PersistStorage } = ConfigureStore();
