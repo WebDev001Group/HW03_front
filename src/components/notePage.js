@@ -1,5 +1,7 @@
 import Layout, { Content, Footer, Header } from "antd/lib/layout/layout";
+import { useEffect } from "react";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/actions";
 import { AppHome } from "./appContent";
 import AppFooter from "./appFooter";
@@ -17,10 +19,17 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 const NotePage = ({ isLoggedIn, username, logout }) => {
+  const navigate =useNavigate()
+  useEffect(()=>{
+    if(!isLoggedIn){
+      navigate("/")
+    }
+
+  },[])
   return (
     <Layout className="mainLayout">
       <Header>
-        <AppHeader logout={logout} />
+        <AppHeader logout={logout} username={username} />
       </Header>
       <Content style={{ marginTop: 64 }}>
         <AppHome />

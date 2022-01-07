@@ -3,9 +3,12 @@ import React from "react";
 import { Anchor } from "antd";
 import { ThunderboltOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "antd";
+
+const { Text } = Typography;
 const { Link } = Anchor;
 
-function AppHeader({ logout }) {
+function AppHeader({ logout, username }) {
   const navigate = useNavigate();
   const onClick = () => {
     logout();
@@ -18,10 +21,19 @@ function AppHeader({ logout }) {
           <ThunderboltOutlined />
           <a href="https://github.com/WebDev001Group">Notie</a>
         </div>
-        <div onClick={onClick}>
-          <Anchor targetOffset="65">
-            <Link title="logout" />
-          </Anchor>
+        <div style={{ flexDirection: "row", display: "flex" , alignItems:"center" }}>
+        <div >
+            <Anchor>
+            <Text type="success">{username}</Text>
+            </Anchor>
+          </div>
+          
+
+          <div onClick={onClick}>
+            <Anchor>
+              <Link title="logout" />
+            </Anchor>
+          </div>
         </div>
       </div>
     </div>

@@ -5,19 +5,24 @@ const INITIAL_STATE = {
 };
 
 const notesReducer = (state = INITIAL_STATE, action) => {
+  // if(action.type==ADD_NOTE){
+    
+  //   console.log("notesreducer: " ,action.type , action.payload)
+  // }
+  
   switch (action.type) {
     case ADD_NOTE:
       return {
-        ...action.payload,
+        allNotes: action.payload,
       };
 
     case DELETE_NOTE:
       return {
-        ...action.payload,
+        allNotes: action.payload,
       };
     case UPDATE_NOTE:
       return {
-        ...action.payload,
+        allNotes: action.payload,
       };
     default:
       return state;

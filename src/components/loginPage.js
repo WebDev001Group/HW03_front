@@ -2,7 +2,7 @@ import { Form, Button, Card, Input, Row, message } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { login } from "../redux/actions";
+import { addNote, login } from "../redux/actions";
 import { loginProccess } from "../controller/login";
 
 const mapStateToProps = (state) => {
@@ -11,10 +11,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (userData) => dispatch(login(userData)),
+    setNote:(data)=>dispatch(addNote(data))
   };
 };
 
-const LoginPage = ({ isLoggedIn, login, logout }) => {
+const LoginPage = ({ isLoggedIn, login, setNote }) => {
   const navigate = useNavigate();
 
   if (isLoggedIn) navigate("/notes");
@@ -28,14 +29,14 @@ const LoginPage = ({ isLoggedIn, login, logout }) => {
         style={{ minHeight: "100vh" }}
       >
         <Card>
-          <Demo navigate={navigate} login={login} />
+          <Demo navigate={navigate} login={login}  setNote={setNote}/>
         </Card>
       </Row>
     </div>
   );
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
-const Demo = ({ navigate, login }) => {
+const Demo = ({ navigate, login , setNote}) => {
   const [type, setType] = useState(true);
   const [form] = Form.useForm();
 
@@ -50,6 +51,7 @@ const Demo = ({ navigate, login }) => {
     console.log("fields:", result);
     if (result.status) {
       login(result.data)
+      // setNote([])
       navigate("/notes");
     } else {
       message.error(result.message);

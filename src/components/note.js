@@ -1,4 +1,4 @@
-import { Card, Avatar } from "antd";
+import { Card, Avatar, message } from "antd";
 import {
   DeleteFilled,
   EditFilled,
@@ -7,8 +7,19 @@ import {
 import confirm from "antd/lib/modal/confirm";
 import { EditNoteModal } from "./editNoteModal";
 import { useState } from "react";
+import { deleteNotes as proccessDeleteNote } from "../controller/notes";
+import { connect } from "react-redux";
+import { deleteNote } from "../redux/actions";
 const { Meta } = Card;
-export const Note = ({ src, avatar, title, description }) => {
+const mapStateToProps = (state) => {
+  return {};
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteNote: (data) => dispatch(deleteNote(data)),
+  };
+};
+const NoteComponent = ({ src, avatar, title, description, id, deleteNote  }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleOk = () => {
     setIsModalVisible(false);
@@ -24,7 +35,10 @@ export const Note = ({ src, avatar, title, description }) => {
         cover={src ? <img alt="example" src={src} /> : null}
         actions={[
           <EditFilled onClick={() => setIsModalVisible(true)} key="edit" />,
-          <DeleteFilled onClick={showDeleteConfirm} key="delete" />,
+          <DeleteFilled
+            onClick={() => showDeleteConfirm(id, deleteNote)}
+            key="delete"
+          />,
         ]}
         style={style.card}
       >
@@ -40,12 +54,14 @@ export const Note = ({ src, avatar, title, description }) => {
         visible={isModalVisible}
         handleOk={handleOk}
         handleCancel={handleCancel}
+        state={{ title: title, description: description, id: id }}
       />
     </div>
   );
 };
+export const Note = connect(mapStateToProps, mapDispatchToProps)(NoteComponent);
 
-function showDeleteConfirm() {
+function showDeleteConfirm(id, deleteNote) {
   confirm({
     title: "Are you sure delete this task?",
     icon: <ExclamationCircleOutlined />,
@@ -54,7 +70,12 @@ function showDeleteConfirm() {
     okType: "danger",
     cancelText: "No",
     onOk() {
-      console.log("OK");
+      let result = proccessDeleteNote(id);
+      if (result.status) {
+        deleteNote(result.notes);
+      } else {
+        message.error("problem with deleting note");
+      }
     },
     onCancel() {
       console.log("Cancel");

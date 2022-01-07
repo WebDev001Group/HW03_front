@@ -1,8 +1,8 @@
 import { Col, Space } from "antd";
 import React from "react";
-import { AddNote } from "./addNote";
+import AddNote from "./addNote";
 
-import { NoteGrid } from "./noteGrid";
+import NoteGrid from "./noteGrid";
 
 export function AppHome() {
   return (
