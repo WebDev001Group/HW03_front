@@ -5,11 +5,12 @@ import {
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import confirm from "antd/lib/modal/confirm";
-import { EditNoteModal } from "./editNoteModal";
+import { EditNoteModal } from "../components/mainPage/content/editNoteModal";
 import { useState } from "react";
-import { deleteNotes as proccessDeleteNote } from "../controller/notes";
+import { deleteNotes as proccessDeleteNote } from "../controller/notesController";
 import { connect } from "react-redux";
 import { deleteNote } from "../redux/actions";
+// import { deleteNote } from "../redux/actions";
 const { Meta } = Card;
 const mapStateToProps = (state) => {
   return {};
@@ -19,7 +20,7 @@ const mapDispatchToProps = (dispatch) => {
     deleteNote: (data) => dispatch(deleteNote(data)),
   };
 };
-const NoteComponent = ({ src, avatar, title, description, id, deleteNote  }) => {
+const NoteWidget = ({ src, avatar, title, description, id, deleteNote }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleOk = () => {
     setIsModalVisible(false);
@@ -59,7 +60,7 @@ const NoteComponent = ({ src, avatar, title, description, id, deleteNote  }) => 
     </div>
   );
 };
-export const Note = connect(mapStateToProps, mapDispatchToProps)(NoteComponent);
+export const Note = connect(mapStateToProps, mapDispatchToProps)(NoteWidget);
 
 function showDeleteConfirm(id, deleteNote) {
   confirm({
@@ -69,12 +70,12 @@ function showDeleteConfirm(id, deleteNote) {
     okText: "Yes",
     okType: "danger",
     cancelText: "No",
-    onOk() {
-      let result = proccessDeleteNote(id);
+    onOk: async () => {
+      let result = await proccessDeleteNote(id);
       if (result.status) {
         deleteNote(result.notes);
       } else {
-        message.error("problem with deleting note");
+        message.error(result.message);
       }
     },
     onCancel() {

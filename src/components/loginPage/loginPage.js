@@ -2,8 +2,8 @@ import { Form, Button, Card, Input, Row, message } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { addNote, login } from "../redux/actions";
-import { loginProccess } from "../controller/login";
+import { addNote, login } from "../../redux/actions";
+import { loginProccess, signUpProccess } from "../../controller/loginController";
 
 const mapStateToProps = (state) => {
   return { isLoggedIn: state.isLoggedIn };
@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (userData) => dispatch(login(userData)),
-    setNote:(data)=>dispatch(addNote(data))
+    setNote: (data) => dispatch(addNote(data)),
   };
 };
 
@@ -29,28 +29,35 @@ const LoginPage = ({ isLoggedIn, login, setNote }) => {
         style={{ minHeight: "100vh" }}
       >
         <Card>
-          <Demo navigate={navigate} login={login}  setNote={setNote}/>
+          <Demo navigate={navigate} login={login} setNote={setNote} />
         </Card>
       </Row>
     </div>
   );
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
-const Demo = ({ navigate, login , setNote}) => {
-  const [type, setType] = useState(true);
+const Demo = ({ navigate, login, setNote }) => {
+  const [isSignUp, setIsSignUp] = useState(true);
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
     console.log("fields:", values);
+    let result;
+    if (isSignUp) {
+      console.log("signUp");
+      result = await signUpProccess(
+        values["username"],
+        values["password"],
+        values["r_password"]
+      );
+    } else {
+      console.log("login");
+      result = await loginProccess(values["username"], values["password"]);
+    }
 
-    let result = await loginProccess(
-      values["username"],
-      values["password"],
-      values["r_password"]
-    );
     console.log("fields:", result);
     if (result.status) {
-      login(result.data)
+      login(result.data);
       // setNote([])
       navigate("/notes");
     } else {
@@ -102,7 +109,7 @@ const Demo = ({ navigate, login , setNote}) => {
       >
         <Input.Password />
       </Form.Item>
-      {type ? (
+      {isSignUp ? (
         <Form.Item
           label="Reapeat"
           name="r_password"
@@ -131,8 +138,8 @@ const Demo = ({ navigate, login , setNote}) => {
           Submit
         </Button>
       </Form.Item>
-      <Button onClick={() => setType(!type)}>
-        {!type ? "go to sign in" : "go to log in"}
+      <Button onClick={() => setIsSignUp(!isSignUp)}>
+        {!isSignUp ? "go to sign in" : "go to log in"}
       </Button>
     </Form>
   );

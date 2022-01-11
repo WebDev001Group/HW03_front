@@ -1,7 +1,6 @@
 import { Button } from "antd";
 import Modal from "antd/lib/modal/Modal";
-import { useState } from "react";
-import AddNote from "./addNote";
+import AddNoteWidget from "../../../widgets/addNote";
 export const EditNoteModal = ({ visible, handleOk, handleCancel , state}) => {
   console.log("modal state: ",state)
   return (
@@ -17,7 +16,7 @@ export const EditNoteModal = ({ visible, handleOk, handleCancel , state}) => {
           ]}
       onCancel={handleCancel}
     >
-      <AddNote state={state} open={true}/>
+      <AddNoteWidget state={state} open={true}/>
     </Modal>
   );
 };

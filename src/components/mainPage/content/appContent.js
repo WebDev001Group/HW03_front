@@ -1,6 +1,6 @@
 import { Col, Space } from "antd";
 import React from "react";
-import AddNote from "./addNote";
+import AddNote from "../../../widgets/addNote";
 
 import NoteGrid from "./noteGrid";
 

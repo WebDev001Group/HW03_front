@@ -1,18 +1,25 @@
 import React from "react";
 
-import { Anchor } from "antd";
+import { Anchor, message } from "antd";
 import { ThunderboltOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "antd";
+import { logoutProccess } from "../../../controller/loginController";
 
 const { Text } = Typography;
 const { Link } = Anchor;
 
 function AppHeader({ logout, username }) {
   const navigate = useNavigate();
-  const onClick = () => {
-    logout();
-    navigate("/");
+  const onClick = async () => {
+    let result = await logoutProccess();
+    if (result.status) {
+      logout();
+      navigate("/");
+    } else {
+      console.log(result);
+      message.error(result.message);
+    }
   };
   return (
     <div className="container-fluid">
@@ -21,13 +28,18 @@ function AppHeader({ logout, username }) {
           <ThunderboltOutlined />
           <a href="https://github.com/WebDev001Group">Notie</a>
         </div>
-        <div style={{ flexDirection: "row", display: "flex" , alignItems:"center" }}>
-        <div >
+        <div
+          style={{
+            flexDirection: "row",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <div>
             <Anchor>
-            <Text type="success">{username}</Text>
+              <Text type="success">{username}</Text>
             </Anchor>
           </div>
-          
 
           <div onClick={onClick}>
             <Anchor>

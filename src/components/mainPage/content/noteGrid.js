@@ -1,10 +1,10 @@
 import { List, message } from "antd";
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import { getNotes } from "../controller/notes";
-import { addNote, deleteNote, updateNote } from "../redux/actions";
+import { getNotes } from "../../../controller/notesController";
+import { addNote, deleteNote, updateNote } from "../../../redux/actions";
 
-import { Note } from "./note";
+import { Note } from "../../../widgets/note";
 
 const mapStateToProps = (state) => {
   // console.log("state: ",state)
