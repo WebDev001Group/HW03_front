@@ -8,6 +8,7 @@ export const getNotes = async () => {
 };
 export const addNotes = async (note) => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
+  
   let state = [...Store.getState().notesReducer.allNotes];
   let id = state[state.length - 1].id;
   let d = { ...note, id: id };
