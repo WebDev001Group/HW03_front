@@ -1,4 +1,6 @@
 @import '~antd/dist/antd.css';
+/* @import '~antd/dist/antd.dark.css'; */
+
 
 .App {
   text-align: center;
@@ -507,4 +509,28 @@ responsive
   .mobileHidden {
     display: none;
   }
+}
+.gradientSelector {
+  background: linear-gradient(92deg, #2fd2a8, #d2842b);
+  background-size: 400% 400%;
+
+  -webkit-animation: gradientAnimation 4s ease infinite;
+  -moz-animation: gradientAnimation 4s ease infinite;
+  animation: gradientAnimation 4s ease infinite;
+}
+
+@-webkit-keyframes gradientAnimation {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@-moz-keyframes gradientAnimation {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@keyframes gradientAnimation {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }

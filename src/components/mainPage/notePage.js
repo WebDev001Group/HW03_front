@@ -28,11 +28,11 @@ const NotePage = ({ isLoggedIn, username, logout }) => {
 
   },[])
   return (
-    <Layout className="mainLayout">
+    <Layout className="mainLayout" style={style.layout}>
       <Header>
         <AppHeader logout={logout} username={username} />
       </Header>
-      <Content style={{ marginTop: 64 }}>
+      <Content style={{ marginTop: 64 , ...style.layout }}>
         <AppHome />
       </Content>
       <Footer>
@@ -41,4 +41,10 @@ const NotePage = ({ isLoggedIn, username, logout }) => {
     </Layout>
   );
 };
+const style={
+  layout:{
+    backgroundColor:"#263238"
+
+  }
+}
 export default connect(mapStateToProps, mapDispatchToProps)(NotePage);

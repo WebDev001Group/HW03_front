@@ -1,4 +1,4 @@
-import { ADD_NOTE, DELETE_NOTE, LOGIN, LOGOUT, UPDATE_NOTE } from "./types";
+import { ADD_NOTE, DELETE_NOTE, LOGIN, LOGOUT, REFRESH_TOKEN, UPDATE_NOTE } from "./types";
 
 export const login = (payload) => {
   return {
@@ -27,6 +27,12 @@ export const deleteNote = (payload) => {
 export const updateNote = (payload) => {
   return {
     type: UPDATE_NOTE,
+    payload: payload,
+  };
+};
+export const refreshToken = (payload) => {
+  return {
+    type: REFRESH_TOKEN,
     payload: payload,
   };
 };

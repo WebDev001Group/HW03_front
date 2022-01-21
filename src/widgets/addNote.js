@@ -3,7 +3,8 @@ import { Button, Col, Collapse, Input, message, Row } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { addNotes, updateNotes } from "../controller/notesController";
+import { useNavigate } from "react-router-dom";
+import { addNotes, middleware, updateNotes } from "../controller/notesController";
 import { addNote, updateNote } from "../redux/actions";
 import { Store } from "../redux/store";
 
@@ -24,21 +25,23 @@ const mapStateToProps = (state) => {
   return {};
 };
 const AddNoteWidget = ({ addNote, state, open }) => {
+  const navigate =useNavigate()
   const [data, setData] = useState(() => {
     if (state) {
       return {
         title: state.title,
         description: state.description,
-        id: state.id,
+        noteId: state.noteId,
       };
     }
     return {
       title: "",
       description: "",
-      id: -1,
+      noteId: -1,
     };
   });
   const onClickAdd = async() => {
+    await middleware(navigate)
     let result = await addNotes(data);
     if (result.status) {
       addNote(result.notes);
@@ -47,6 +50,7 @@ const AddNoteWidget = ({ addNote, state, open }) => {
     }
   };
   const onClickUpdate = async () => {
+    await middleware(navigate)
     let result = await updateNotes(data);
     if (result.status) {
       addNote(result.notes);
@@ -104,6 +108,8 @@ const style = {
   collapse: {
     width: "100%",
     maxWidth: 900,
+    backgroundColor:"#62757f",
+    borderRadius: 10
   },
 
   parent: {
@@ -112,5 +118,7 @@ const style = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor:"transparent"
+    
   },
 };

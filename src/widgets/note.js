@@ -1,4 +1,4 @@
-import { Card, Avatar, message } from "antd";
+import { Card, Avatar, message, Row, Space, Col } from "antd";
 import {
   DeleteFilled,
   EditFilled,
@@ -7,9 +7,11 @@ import {
 import confirm from "antd/lib/modal/confirm";
 import { EditNoteModal } from "../components/mainPage/content/editNoteModal";
 import { useState } from "react";
-import { deleteNotes as proccessDeleteNote } from "../controller/notesController";
+import { deleteNotes as proccessDeleteNote, middleware } from "../controller/notesController";
 import { connect } from "react-redux";
 import { deleteNote } from "../redux/actions";
+import Text from "antd/lib/typography/Text";
+import { useNavigate } from "react-router-dom";
 // import { deleteNote } from "../redux/actions";
 const { Meta } = Card;
 const mapStateToProps = (state) => {
@@ -22,6 +24,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 const NoteWidget = ({ src, avatar, title, description, id, deleteNote }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+
   const handleOk = () => {
     setIsModalVisible(false);
   };
@@ -29,40 +32,74 @@ const NoteWidget = ({ src, avatar, title, description, id, deleteNote }) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
+  const backgroundColors = [
+    "#ffa4a2",
+    "#ff94c2",
+    "#ee98fb",
+    "#c7a4ff",
+    "#9be7ff",
+    "#82e9de",
+    "#b2fab4",
+    "#ffffa8",
+    "#ffe97d",
+    "#ffbb93",
+  ];
+  const fonts = [ 23,  25, 27];
+  let randomColor = getRandomInt(backgroundColors.length);
+  let randomFont = getRandomInt(fonts.length);
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+  const navigate = useNavigate()
   return (
-    <div>
+    <div style={style.parent}>
       <Card
-        cover={src ? <img alt="example" src={src} /> : null}
-        actions={[
-          <EditFilled onClick={() => setIsModalVisible(true)} key="edit" />,
-          <DeleteFilled
-            onClick={() => showDeleteConfirm(id, deleteNote)}
-            key="delete"
-          />,
-        ]}
-        style={style.card}
+        bordered={false}
+        style={{
+          ...style.card,
+          backgroundColor: backgroundColors[randomColor],
+        }}
       >
-        <Meta
-          avatar={
-            <Avatar src={avatar ?? "https://joeschmoe.io/api/v1/random"} />
-          }
-          title={title ?? "Card title"}
-          description={description}
-        />
+        <Space direction="vertical" style={{ width: "100%" }}>
+          <Meta
+            title={
+              <Text style={{ fontSize:fonts[randomFont] }}>{title ?? "Card title"}</Text>
+            }
+            description={<Text style={{ fontSize: 12 ,color:"#1b1b1b" , fontWeight:"bold"}}>{description}</Text>}
+            // description={description}
+          />
+          <Row justify="space-around">
+            <Col style={style.rowDiv}>
+              <EditFilled
+                style={style.icon}
+                onClick={() => setIsModalVisible(true)}
+                key="edit"
+              />
+            </Col>
+
+            <Col style={style.rowDiv}>
+              <DeleteFilled
+                style={style.icon}
+                onClick={() => showDeleteConfirm(id, deleteNote,  navigate)}
+                key="delete"
+              />
+            </Col>
+          </Row>
+        </Space>
       </Card>
       <EditNoteModal
         visible={isModalVisible}
         handleOk={handleOk}
         handleCancel={handleCancel}
-        state={{ title: title, description: description, id: id }}
+        state={{ title: title, description: description, noteId: id }}
       />
     </div>
   );
 };
 export const Note = connect(mapStateToProps, mapDispatchToProps)(NoteWidget);
 
-function showDeleteConfirm(id, deleteNote) {
+function showDeleteConfirm(id, deleteNote, navigate) {
+  
   confirm({
     title: "Are you sure delete this task?",
     icon: <ExclamationCircleOutlined />,
@@ -71,6 +108,7 @@ function showDeleteConfirm(id, deleteNote) {
     okType: "danger",
     cancelText: "No",
     onOk: async () => {
+      await middleware(navigate)
       let result = await proccessDeleteNote(id);
       if (result.status) {
         deleteNote(result.notes);
@@ -85,6 +123,19 @@ function showDeleteConfirm(id, deleteNote) {
 }
 const style = {
   card: {
-    boxShadow: "2px 4px 12px 5px rgba(208, 216, 243, 0.6)",
+    borderRadius: 5,
+    padding: 0,
   },
+  parent: {
+    padding: 0,
+    margin: 0,
+  },
+  icon: {
+    fontSize: 20,
+    // backgroundColor: "white",
+    // borderRadius: 100,
+    padding: 5,
+  },
+  rowDiv: {},
+  //  { flex: 1, alignItems: "center", justifyContent: "center"  },
 };

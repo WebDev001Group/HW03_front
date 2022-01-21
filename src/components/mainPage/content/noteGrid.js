@@ -1,7 +1,8 @@
 import { List, message } from "antd";
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import { getNotes } from "../../../controller/notesController";
+import { useNavigate } from "react-router-dom";
+import { getNotes, middleware } from "../../../controller/notesController";
 import { addNote, deleteNote, updateNote } from "../../../redux/actions";
 
 import { Note } from "../../../widgets/note";
@@ -20,17 +21,29 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 const NoteGrid = ({ notes, addNote, deleteNote, updateNote }) => {
+  const navigate = useNavigate()
   useEffect(() => {
-    console.log("nnnotes: ",notes);
-    getNotes().then((result) => {
-      // console.log("result: ", result);
-      if (result.status) {
-        addNote(result.notes);
-        // setNoteList(result.notes);
-      } else {
-        message.error(result.message);
-      }
-    });
+    console.log("nnnotes: ", notes);
+    middleware(navigate).then(() =>
+      getNotes()
+        .then((result) => {
+          console.log("hell1");
+          // console.log("result: ", result);
+          if (result.status) {
+            console.log("====================================");
+            console.log(".then: ", result);
+            console.log("====================================");
+            addNote(result.notes);
+            // setNoteList(result.notes);
+          } else {
+            message.error(result.message);
+          }
+        })
+        .catch((e) => {
+          console.log("hello:, ", e);
+          message.error(e);
+        })
+    );
   }, []);
   // useEffect(() => {}, [JSON.stringify(Store.getState().notesReducer.allnotes)]);
   console.log("in 1");
@@ -47,16 +60,15 @@ const NoteGrid = ({ notes, addNote, deleteNote, updateNote }) => {
       }}
       dataSource={notes}
       renderItem={(item) => {
-        console.log("in 2: " );
+        console.log("in 2: ");
         return (
-          <List.Item >
+          <List.Item>
             <Note
               title={item.title}
               description={item.description}
               src={"https://joeschmoe.io/api/v1/random"}
-              id={item.id}
+              id={item.noteId}
               key={item.id}
-              
             />
           </List.Item>
         );

@@ -1,7 +1,7 @@
-import { LOGIN, LOGOUT } from "../types";
+import { LOGIN, LOGOUT, REFRESH_TOKEN } from "../types";
 
 const INITIAL_STATE = {
-    isLoggedIn:false
+  isLoggedIn: false,
 };
 
 const loggedInReducer = (state = INITIAL_STATE, action) => {
@@ -9,14 +9,19 @@ const loggedInReducer = (state = INITIAL_STATE, action) => {
     case LOGIN:
       return {
         ...state,
-        ...(action.payload),
-        isLoggedIn:true
-
+        ...action.payload,
+        isLoggedIn: true,
       };
 
     case LOGOUT:
       return {
-        isLoggedIn:false
+        isLoggedIn: false,
+      };
+    case REFRESH_TOKEN:
+      console.log("inside")
+      return {
+        ...state,
+        ...action.payload,
       };
 
     default:

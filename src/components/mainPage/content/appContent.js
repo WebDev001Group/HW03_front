@@ -21,5 +21,6 @@ export function AppHome() {
 const style = {
   space: {
     width: "100%",
+    minHeight:"65vh"
   },
 };

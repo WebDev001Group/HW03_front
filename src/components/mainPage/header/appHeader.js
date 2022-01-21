@@ -5,13 +5,15 @@ import { ThunderboltOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "antd";
 import { logoutProccess } from "../../../controller/loginController";
+import { middleware } from "../../../controller/notesController";
+import { Store } from "../../../redux/store";
 
 const { Text } = Typography;
 const { Link } = Anchor;
 
 function AppHeader({ logout, username }) {
   const navigate = useNavigate();
-  const onClick = async () => {
+  const onClick = async() => {
     let result = await logoutProccess();
     if (result.status) {
       logout();
@@ -46,6 +48,11 @@ function AppHeader({ logout, username }) {
               <Link title="logout" />
             </Anchor>
           </div>
+          {/* <div onClick={onClick2}>
+            <Anchor>
+              <Link title="debug" />
+            </Anchor> */}
+          {/* </div> */}
         </div>
       </div>
     </div>
